@@ -36,7 +36,7 @@ class OdooClient
             $response = $this->httpClient->request($method, $endpoint, $options);
             return $this->processResponse($response);
         } catch (RequestException $e) {
-            throw new ClientException("HTTP error: {$e->getMessage()}", $e->getCode(), $e);
+            throw ClientException::fromHttpError($e->getCode(), $e->getMessage());
         }
     }
 
@@ -50,9 +50,7 @@ class OdooClient
         }
 
         if ($statusCode !== 200 || ($body['responseCode'] ?? null) !== 200) {
-            $message = $body['message'] ?? 'Unknown error';
-            $code = $body['responseCode'] ?? $statusCode;
-            throw new OdooException($message, $code);
+            throw OdooException::fromOdooError($body);
         }
 
         return $body['data'] ?? [];
