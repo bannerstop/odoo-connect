@@ -1,0 +1,25 @@
+{
+    "name": "bannerstop/odoo-connect",
+    "keywords": [
+        "odoo"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "homepage": "https://github.com/bannerstop/odoo-connect",
+    "authors": [
+        {
+            "name": "Seweryn Banasiak",
+            "email": "banasiak@bannerstop.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "guzzlehttp/guzzle": "^7.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bannerstop\\OdooConnect\\": "src/"
+        }
+    }
+}
