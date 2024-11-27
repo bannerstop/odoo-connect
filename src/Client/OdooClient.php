@@ -4,18 +4,28 @@ namespace Bannerstop\OdooConnect\Client;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
 use Psr\Http\Message\ResponseInterface;
 use Bannerstop\OdooConnect\Exceptions\ClientException;
 use Bannerstop\OdooConnect\Exceptions\OdooException;
+use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 
 class OdooClient
 {
     private GuzzleClient $httpClient;
 
     public function __construct(
-        private readonly OdooConnection $connection
+        private readonly OdooConnection $connection,
+        private readonly int $requestsPerSecond = 3
     ) {
+        $stack = HandlerStack::create();
+
+        if ($this->requestsPerSecond > 0) {
+            $stack->push(RateLimiterMiddleware::perSecond($this->requestsPerSecond));
+        }
+
         $this->httpClient = new GuzzleClient([
+            'handler' => $stack,
             'base_uri' => $this->connection->getBaseUrl(),
             'headers'  => [
                 'api-key'       => $this->connection->getApiKey(),
