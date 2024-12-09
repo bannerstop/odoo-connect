@@ -7,11 +7,11 @@ use DateTimeImmutable;
 class InvoiceDTO
 {
     public function __construct(
-        private readonly string $id,
-        private readonly ?float $amountTotal,
-        private readonly ?float $amountUntaxed,
-        private readonly ?float $amountResidual,
-        private readonly DateTimeImmutable $createDate,
+        public readonly string $id,
+        public readonly ?float $amountTotal,
+        public readonly ?float $amountUntaxed,
+        public readonly ?float $amountResidual,
+        public readonly DateTimeImmutable $createDate,
     ) {}
 
     public static function fromArray(array $data): self

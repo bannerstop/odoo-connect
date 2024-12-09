@@ -2,6 +2,7 @@
 
 namespace Bannerstop\OdooConnect\Mappers;
 
+use Bannerstop\OdooConnect\DTO\CustomerDTO;
 use Bannerstop\OdooConnect\DTO\OrderDTO;
 use Bannerstop\OdooConnect\DTO\QuoteDTO;
 use Bannerstop\OdooConnect\DTO\OrderLineDTO;
@@ -14,13 +15,15 @@ class ModelDTOMapper
     public static function map(ModelEnum $model, array $data): object
     {
         return match ($model) {
-            ModelEnum::SALE_ORDER => self::mapSaleOrder($data),
+            ModelEnum::SALE_ORDER => OrderDTO::fromArray($data),
             ModelEnum::SALE_ORDER_LINE => OrderLineDTO::fromArray($data),
             ModelEnum::ACCOUNT_MOVE => InvoiceDTO::fromArray($data),
+            ModelEnum::RES_PARTNER => CustomerDTO::fromArray($data),
             default => throw new InvalidArgumentException("No mapping defined for model: {$model->value}")
         };
     }
 
+    /* not used for now */
     private static function mapSaleOrder(array $data): object
     {
         if ($data['state'] === 'draft') {

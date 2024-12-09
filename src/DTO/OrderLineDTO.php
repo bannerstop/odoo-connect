@@ -6,9 +6,9 @@ namespace Bannerstop\OdooConnect\DTO;
 class OrderLineDTO
 {
     public function __construct(
-        private readonly string $name,
-        private readonly ?string $unit,
-        private readonly float $quantity
+        public readonly string $name,
+        public readonly ?string $unit,
+        public readonly float $quantity
     ) {}
 
     public static function fromArray(array $data): self

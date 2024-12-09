@@ -56,8 +56,6 @@ class RequestBuilder
             'db' => $this->client->getConnection()->getDb(),
         ];
 
-        print_r($queryParams);
-
         return $this->client->request('GET', $endpoint, ['query' => $queryParams]);
     }
 

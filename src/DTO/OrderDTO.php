@@ -7,9 +7,14 @@ use DateTimeImmutable;
 class OrderDTO
 {
     public function __construct(
-        private readonly string $id,
-        private readonly string $state,
-        private readonly DateTimeImmutable $createDate,
+        public readonly string $id,
+        public readonly string $state,
+        public readonly string $shopOrderId,
+        public readonly string $customerId,
+        public readonly string $customerName,
+        public readonly float $amount,
+        //public readonly float $lifetime,
+        public readonly DateTimeImmutable $createDate,
     ) {}
 
     public static function fromArray(array $data): self
@@ -17,7 +22,11 @@ class OrderDTO
         return new self(
             id: $data["name"],
             state: $data['state'],
-            createDate: new DateTimeImmutable($data['create_date']),
+            shopOrderId: $data['client_order_ref'],
+            customerId: $data['partner_id'][0]["id"],
+            customerName: $data['partner_id'][0]["name"],
+            amount: $data['amount_total'],
+            createDate: new DateTimeImmutable($data['create_date'])
         );
     }
 }

@@ -4,6 +4,7 @@ namespace Bannerstop\OdooConnect\DTO;
 
 use DateTimeImmutable;
 
+/* not used for now */
 class QuoteDTO
 {
     public function __construct(
