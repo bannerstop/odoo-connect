@@ -14,6 +14,8 @@ class OrderDTO
         public readonly string $customerId,
         public readonly string $customerName,
         public readonly float $amount,
+        public readonly array $tagIds,
+        public readonly ?DateTimeImmutable $dateProduction,
         public readonly ?DateTimeImmutable $lifetime,
         public readonly DateTimeImmutable $createDate,
     ) {}
@@ -28,6 +30,8 @@ class OrderDTO
             customerId: $data['partner_id'][0]["id"],
             customerName: $data['partner_id'][0]["name"],
             amount: $data['amount_total'],
+            tagIds: array_column($data['tag_ids'] ?? [], 'id'),
+            dateProduction: $data['date_production'] ? new DateTimeImmutable($data['date_production']) : null,
             lifetime: $data['date_files'] ? new DateTimeImmutable($data['date_files']) : null,
             createDate: new DateTimeImmutable($data['create_date'])
         );
