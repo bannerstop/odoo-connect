@@ -11,6 +11,8 @@ class RequestBuilder
 {
     private QueryBuilder $queryBuilder;
     private ModelEnum $model;
+    private ?string $recordId = null;
+    private array $updateFields = [];
 
     public function __construct(
         private readonly OdooClient $client
@@ -66,5 +68,33 @@ class RequestBuilder
             fn(array $item) => ModelDTOMapper::map($this->model, $item),
             $rawData
         );
+    }
+
+    public function recordId(string $id): self
+    {
+        $this->recordId = $id;
+        return $this;
+    }
+    
+    public function updateFields(array $fields): self
+    {
+        $this->updateFields = $fields;
+        return $this;
+    }
+
+    public function update(): bool
+    {
+        if (!$this->recordId) {
+            throw new \InvalidArgumentException('Record ID is required for update');
+        }
+        
+        $endpoint = sprintf('/api/%s/%s', $this->model->value, $this->recordId);
+        
+        $this->client->request('PUT', $endpoint, [
+            'query' => ['db' => $this->client->getConnection()->getDb()],
+            'json' => $this->updateFields
+        ]);
+        
+        return true;
     }
 }

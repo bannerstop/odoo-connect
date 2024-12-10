@@ -5,7 +5,7 @@
     ],
     "type": "library",
     "license": "MIT",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "homepage": "https://github.com/bannerstop/odoo-connect",
     "authors": [
         {
@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": ">=8.1",
-        "guzzlehttp/guzzle": "^7.9",
+        "guzzlehttp/guzzle": "^7.4",
         "spatie/guzzle-rate-limiter-middleware": "^2.0"
     },
     "autoload": {

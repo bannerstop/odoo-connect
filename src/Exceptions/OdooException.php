@@ -23,12 +23,12 @@ class OdooException extends Exception
         return $this->odooMessage;
     }
 
-    public static function fromOdooError(array $response): self
+    public static function fromOdooError(array $response): static
     {
         $message = $response['message'] ?? 'Unknown error';
         $responseCode = $response['responseCode'] ?? 0;
 
-        return new self(
+        return new static(
             sprintf('Odoo API error: %s', $message),
             $responseCode,
             $message

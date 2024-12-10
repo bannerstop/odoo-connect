@@ -6,6 +6,8 @@ use Bannerstop\OdooConnect\Builders\RequestBuilder;
 use Bannerstop\OdooConnect\Enums\ModelEnum;
 use Bannerstop\OdooConnect\DTO\OrderDTO;
 use Bannerstop\OdooConnect\DTO\OrderLineDTO;
+use Bannerstop\OdooConnect\Enums\StateEnum;
+use Bannerstop\OdooConnect\Exceptions\OdooRecordNotFoundException;
 
 class OrderService
 {
@@ -19,6 +21,7 @@ class OrderService
      * @param string $orderId The Odoo order ID
      * @return array<OrderDTO> Returns array of OrderDTO objects
      * @throws \InvalidArgumentException When mapping fails
+     * @throws OdooRecordNotFoundException When no record is found
      */
     public function getOrderByOrderId(string $orderId): array
     {
@@ -36,6 +39,7 @@ class OrderService
      * @param string $endDate End date in Y-m-d format
      * @return array<OrderDTO> Returns array of OrderDTO objects
      * @throws \InvalidArgumentException When mapping fails
+     * @throws OdooRecordNotFoundException When no record is found
      */
     public function getOrdersByDate(string $startDate, string $endDate): array
     {
@@ -53,6 +57,7 @@ class OrderService
      * @param string $shopOrderId The shop's order reference
      * @return array<OrderDTO> Returns array of OrderDTO objects
      * @throws \InvalidArgumentException When mapping fails
+     * @throws OdooRecordNotFoundException When no record is found
      */
     public function getOrderByShopOrderId(string $shopOrderId): array
     {
@@ -69,6 +74,7 @@ class OrderService
      * @param string $orderId The Odoo order ID
      * @return array<OrderLineDTO> Returns array of OrderLineDTO objects
      * @throws \InvalidArgumentException When mapping fails
+     * @throws OdooRecordNotFoundException When no record is found
      */
     public function getOrderItemsByOrderId(string $orderId): array
     {
@@ -76,6 +82,76 @@ class OrderService
             ->model(ModelEnum::SALE_ORDER_LINE)
             ->where('order_id.name', '=', $orderId)
             ->where('state', '!=', 'draft')
+            ->get();
+    }
+
+    /**
+     * Update order fields
+     *
+     * @param int $id The Odoo ID (not order ID)
+     * @param array<string, mixed> $fields Associative array of fields to update
+     * @return bool Returns true if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateOrderFields(int $id, array $fields): bool
+    {
+        return $this->requestBuilder
+            ->model(ModelEnum::SALE_ORDER)
+            ->recordId($id)
+            ->updateFields($fields)
+            ->update();
+    }
+
+    /**
+     * Update order's last Jira sync timestamp
+     *
+     * @param int $id The Odoo ID (not order ID)
+     * @return bool Returns true if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateOrderLastJiraSync(int $id): bool
+    {
+        $currentTimestamp = (new \DateTime())->format('Y-m-d H:i:s');
+        
+        return $this->updateOrderFields(
+            $id, 
+            ['x-jira-status' => $currentTimestamp]
+        );
+    }
+
+    /**
+     * Get quote by its Odoo quote ID
+     *
+     * @param string $quoteId The Odoo quote ID
+     * @return array<OrderDTO> Returns array of OrderDTO objects
+     * @throws \InvalidArgumentException When mapping fails
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function getQuoteByQuoteId(string $quoteId): array
+    {
+        return $this->requestBuilder
+            ->model(ModelEnum::SALE_ORDER)
+            ->state(StateEnum::QUOTE)
+            ->where('name', '=', $quoteId)
+            ->get();
+    }
+
+    /**
+     * Get quotes within a date range
+     *
+     * @param string $startDate Start date in Y-m-d format
+     * @param string $endDate End date in Y-m-d format
+     * @return array<OrderDTO> Returns array of OrderDTO objects
+     * @throws \InvalidArgumentException When mapping fails
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function getQuotesByDate(string $startDate, string $endDate): array
+    {
+        return $this->requestBuilder
+            ->model(ModelEnum::SALE_ORDER)
+            ->state(StateEnum::QUOTE)
+            ->where('create_date', '>=', $startDate)
+            ->where('create_date', '<=', $endDate)
             ->get();
     }
 }

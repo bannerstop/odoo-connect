@@ -2,6 +2,7 @@
 
 namespace Bannerstop\OdooConnect\Client;
 
+use Bannerstop\OdooConnect\Exceptions\OdooRecordNotFoundException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
@@ -60,6 +61,14 @@ class OdooClient
         }
 
         if ($statusCode !== 200 || ($body['responseCode'] ?? null) !== 200) {
+            throw OdooException::fromOdooError($body);
+        }
+
+        if (isset($body['success']) && $body['success'] === false) {
+            $message = $body['message'] ?? '';
+            if (stripos($message, 'no record found') !== false) {
+                throw OdooRecordNotFoundException::fromOdooError($body);
+            }
             throw OdooException::fromOdooError($body);
         }
 
