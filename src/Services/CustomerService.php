@@ -17,15 +17,15 @@ class CustomerService
      * Get customer by customer ID
      *
      * @param string $customerId Shop order ID reference
-     * @return array<CustomerDTO> Returns array of CustomerDTO objects
+     * @return CustomerDTO Returns a CustomerDTO object
      * @throws \InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getCustomerById(string $customerId): array
+    public function getCustomerById(string $customerId): CustomerDTO
     {
         return $this->requestBuilder
             ->model(ModelEnum::RES_PARTNER)
             ->where('id', '=', $customerId)
-            ->get();
+            ->get()[0];
     }
 }
