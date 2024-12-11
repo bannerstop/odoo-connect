@@ -19,17 +19,17 @@ class OrderService
      * Get order by its Odoo order ID
      *
      * @param string $orderId The Odoo order ID
-     * @return array<OrderDTO> Returns array of OrderDTO objects
+     * @return OrderDTO Returns an OrderDTO object
      * @throws \InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getOrderByOrderId(string $orderId): array
+    public function getOrderByOrderId(string $orderId): OrderDTO
     {
         return $this->requestBuilder
             ->model(ModelEnum::SALE_ORDER)
             ->where('name', '=', $orderId)
             ->where('state', '!=', 'draft')
-            ->get();
+            ->get()[0];
     }
 
     /**
@@ -55,17 +55,17 @@ class OrderService
      * Get order by shop's order ID
      *
      * @param string $shopOrderId The shop's order reference
-     * @return array<OrderDTO> Returns array of OrderDTO objects
+     * @return OrderDTO Returns an OrderDTO object
      * @throws \InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getOrderByShopOrderId(string $shopOrderId): array
+    public function getOrderByShopOrderId(string $shopOrderId): OrderDTO
     {
         return $this->requestBuilder
             ->model(ModelEnum::SALE_ORDER)
             ->where('client_order_ref', '=', $shopOrderId)
             ->where('state', '!=', 'draft')
-            ->get();
+            ->get()[0];
     }
 
     /**
@@ -123,17 +123,17 @@ class OrderService
      * Get quote by its Odoo quote ID
      *
      * @param string $quoteId The Odoo quote ID
-     * @return array<OrderDTO> Returns array of OrderDTO objects
+     * @return OrderDTO Returns an OrderDTO object
      * @throws \InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getQuoteByQuoteId(string $quoteId): array
+    public function getQuoteByQuoteId(string $quoteId): OrderDTO
     {
         return $this->requestBuilder
             ->model(ModelEnum::SALE_ORDER)
             ->state(StateEnum::QUOTE)
             ->where('name', '=', $quoteId)
-            ->get();
+            ->get()[0];
     }
 
     /**
