@@ -6,6 +6,7 @@ use Bannerstop\OdooConnect\Builders\RequestBuilder;
 use Bannerstop\OdooConnect\Enums\ModelEnum;
 use Bannerstop\OdooConnect\DTO\OrderDTO;
 use Bannerstop\OdooConnect\DTO\OrderLineDTO;
+use Bannerstop\OdooConnect\Enums\StateEnum;
 use Bannerstop\OdooConnect\Exceptions\OdooRecordNotFoundException;
 
 class OrderService
@@ -35,17 +36,23 @@ class OrderService
      *
      * @param string $startDate Start date in Y-m-d format
      * @param string $endDate End date in Y-m-d format
+     * @param StateEnum|null $type Optional order type
      * @return array<OrderDTO> Returns array of OrderDTO objects
      * @throws \InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getOrdersByDate(string $startDate, string $endDate): array
+    public function getOrdersByDate(string $startDate, string $endDate, ?StateEnum $type = null): array
     {
-        return $this->requestBuilder
+        $request = $this->requestBuilder
             ->model(ModelEnum::SALE_ORDER)
             ->where('create_date', '>=', $startDate)
-            ->where('create_date', '<=', $endDate)
-            ->get();
+            ->where('create_date', '<=', $endDate);
+    
+        if ($type !== null) {
+            $request->state($type);
+        }
+    
+        return $request->get();
     }
 
     /**
