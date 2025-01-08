@@ -119,7 +119,7 @@ class OrderService
         
         return $this->updateOrderFields(
             $id, 
-            ['x-jira-status' => $currentTimestamp]
+            ['date_jira_last_sync' => $currentTimestamp]
         );
     }
 }
