@@ -85,7 +85,6 @@ class OrderService
         return $this->requestBuilder
             ->model(ModelEnum::SALE_ORDER_LINE)
             ->where('order_id.name', '=', $orderId)
-            ->where('state', '!=', 'draft')
             ->get();
     }
 
