@@ -1,16 +1,16 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Builders;
+namespace Bannerstop\OdooConnect\Builder;
 
 use Bannerstop\OdooConnect\Client\OdooClient;
-use Bannerstop\OdooConnect\Enums\StateEnum;
-use Bannerstop\OdooConnect\Mappers\ModelDTOMapper;
-use Bannerstop\OdooConnect\Enums\ModelEnum;
+use Bannerstop\OdooConnect\Enum\State;
+use Bannerstop\OdooConnect\Mapper\ModelDTOMapper;
+use Bannerstop\OdooConnect\Enum\Model;
 
 class RequestBuilder
 {
     private QueryBuilder $queryBuilder;
-    private ModelEnum $model;
+    private Model $model;
     private ?string $recordId = null;
     private array $updateFields = [];
 
@@ -20,7 +20,7 @@ class RequestBuilder
         $this->queryBuilder = new QueryBuilder();
     }
 
-    public function model(ModelEnum $model): self
+    public function model(Model $model): self
     {
         $this->model = $model;
         $this->queryBuilder->model($model->value);
@@ -33,7 +33,7 @@ class RequestBuilder
         return $this;
     }
 
-    public function state(StateEnum $state): self
+    public function state(State $state): self
     {
         $this->queryBuilder->where('state', '=', $state->value);
         return $this;

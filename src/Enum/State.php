@@ -1,8 +1,8 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Enums;
+namespace Bannerstop\OdooConnect\Enum;
 
-enum StateEnum: string
+enum State: string
 {
     case QUOTE = 'draft';
     case INTERMEDIATE = 'sent';

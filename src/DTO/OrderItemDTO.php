@@ -3,7 +3,7 @@
 namespace Bannerstop\OdooConnect\DTO;
 
 
-class OrderLineDTO
+class OrderItemDTO
 {
     public function __construct(
         public readonly ?string $productName,

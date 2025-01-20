@@ -2,13 +2,13 @@
 
 namespace Bannerstop\OdooConnect\Client;
 
-use Bannerstop\OdooConnect\Exceptions\OdooRecordNotFoundException;
+use Bannerstop\OdooConnect\Exception\OdooRecordNotFoundException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use Psr\Http\Message\ResponseInterface;
-use Bannerstop\OdooConnect\Exceptions\ClientException;
-use Bannerstop\OdooConnect\Exceptions\OdooException;
+use Bannerstop\OdooConnect\Exception\OdooClientException;
+use Bannerstop\OdooConnect\Exception\OdooApiException;
 use Spatie\GuzzleRateLimiterMiddleware\RateLimiterMiddleware;
 
 class OdooClient
@@ -47,7 +47,7 @@ class OdooClient
             $response = $this->httpClient->request($method, $endpoint, $options);
             return $this->processResponse($response);
         } catch (RequestException $e) {
-            throw ClientException::fromHttpError($e->getCode(), $e->getMessage());
+            throw OdooClientException::fromHttpError($e->getCode(), $e->getMessage());
         }
     }
 
@@ -57,11 +57,11 @@ class OdooClient
         $body = json_decode($response->getBody()->getContents(), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new ClientException('Invalid JSON response from API.');
+            throw new OdooClientException('Invalid JSON response from API.');
         }
 
         if ($statusCode !== 200 || ($body['responseCode'] ?? null) !== 200) {
-            throw OdooException::fromOdooError($body);
+            throw OdooApiException::fromOdooError($body);
         }
 
         if (isset($body['success']) && $body['success'] === false) {
@@ -69,7 +69,7 @@ class OdooClient
             if (stripos($message, 'no record found') !== false) {
                 throw OdooRecordNotFoundException::fromOdooError($body);
             }
-            throw OdooException::fromOdooError($body);
+            throw OdooApiException::fromOdooError($body);
         }
 
         return $body['data'] ?? [];

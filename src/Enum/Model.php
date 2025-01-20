@@ -1,8 +1,8 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Enums;
+namespace Bannerstop\OdooConnect\Enum;
 
-enum ModelEnum: string
+enum Model: string
 {
     case SALE_ORDER = 'sale.order';
     case SALE_ORDER_LINE = 'sale.order.line';

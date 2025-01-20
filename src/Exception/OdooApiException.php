@@ -1,10 +1,10 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Exceptions;
+namespace Bannerstop\OdooConnect\Exception;
 
 use Exception;
 
-class OdooException extends Exception
+class OdooApiException extends Exception
 {
     private ?string $odooMessage;
 

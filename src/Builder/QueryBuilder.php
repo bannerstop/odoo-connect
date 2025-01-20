@@ -1,6 +1,6 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Builders;
+namespace Bannerstop\OdooConnect\Builder;
 
 class QueryBuilder
 {
@@ -27,6 +27,7 @@ class QueryBuilder
         return json_encode($this->domain, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
     }
 
+    
     public function fields(array $fields): self
     {
         $this->fields = $fields;

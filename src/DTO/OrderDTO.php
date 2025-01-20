@@ -2,7 +2,7 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
-use Bannerstop\OdooConnect\Enums\StateEnum;
+use Bannerstop\OdooConnect\Enum\State;
 use DateTimeImmutable;
 use DateTimeZone;
 
@@ -11,7 +11,7 @@ class OrderDTO
     public function __construct(
         public readonly int $id,
         public readonly string $orderId,
-        public readonly StateEnum $state,
+        public readonly State $state,
         public readonly string $shopOrderId,
         public readonly int $customerId,
         public readonly string $customerName,
@@ -35,7 +35,7 @@ class OrderDTO
         return new self(
             id: $data["id"],
             orderId: $data["name"],
-            state: StateEnum::from($data['state']),
+            state: State::from($data['state']),
             shopOrderId: $data['client_order_ref'],
             customerId: $data['partner_id'][0]["id"],
             customerName: $data['partner_id'][0]["name"],
