@@ -1,41 +1,40 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Builders;
+namespace Bannerstop\OdooConnect\Builder;
 
 use Bannerstop\OdooConnect\Client\OdooClient;
-use Bannerstop\OdooConnect\Enums\StateEnum;
-use Bannerstop\OdooConnect\Mappers\ModelDTOMapper;
-use Bannerstop\OdooConnect\Enums\ModelEnum;
+use Bannerstop\OdooConnect\Mapper\ModelDTOMapper;
 
 class RequestBuilder
 {
-    private QueryBuilder $queryBuilder;
-    private ModelEnum $model;
-    private ?string $recordId = null;
-    private array $updateFields = [];
-
-    public function __construct(
-        private readonly OdooClient $client
-    ) {
+    private $queryBuilder;
+    private $model;
+    private $recordId = null;
+    private $updateFields = [];
+    private $client;
+    
+    public function __construct(OdooClient $client)
+    {
+        $this->client = $client;
         $this->queryBuilder = new QueryBuilder();
     }
 
-    public function model(ModelEnum $model): self
+    public function model(string $model): self
     {
         $this->model = $model;
-        $this->queryBuilder->model($model->value);
+        $this->queryBuilder->model($model);
         return $this;
     }
 
-    public function where(string $field, string $operator, mixed $value): self
+    public function where(string $field, string $operator, $value): self
     {
         $this->queryBuilder->where($field, $operator, $value);
         return $this;
     }
 
-    public function state(StateEnum $state): self
+    public function state(string $state): self
     {
-        $this->queryBuilder->where('state', '=', $state->value);
+        $this->queryBuilder->where('state', '=', $state);
         return $this;
     }
 
@@ -65,7 +64,9 @@ class RequestBuilder
     {
         $rawData = $this->getRaw();
         return array_map(
-            fn(array $item) => ModelDTOMapper::map($this->model, $item),
+            function(array $item) {
+                return ModelDTOMapper::map($this->model, $item);
+            },
             $rawData
         );
     }
@@ -88,7 +89,7 @@ class RequestBuilder
             throw new \InvalidArgumentException('Record ID is required for update');
         }
         
-        $endpoint = sprintf('/api/%s/%s', $this->model->value, $this->recordId);
+        $endpoint = sprintf('/api/%s/%s', $this->model, $this->recordId);
         
         $this->client->request('PUT', $endpoint, [
             'query' => ['db' => $this->client->getConnection()->getDb()],

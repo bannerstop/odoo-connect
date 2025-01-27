@@ -4,30 +4,50 @@ namespace Bannerstop\OdooConnect\DTO;
 
 class CustomerDTO
 {
+    public string $id;
+    public ?string $name;
+    public ?string $completeName;
+    public ?string $commercialCompanyName;
+    public ?string $email;
+    public ?string $street;
+    public ?string $street2;
+    public ?string $zip;
+    public ?string $city;
+
     public function __construct(
-        public readonly string $id,
-        public readonly ?string $name,
-        public readonly ?string $completeName,
-        public readonly ?string $commercialCompanyName,
-        public readonly ?string $email,
-        public readonly ?string $street,
-        public readonly ?string $street2,
-        public readonly ?string $zip,
-        public readonly ?string $city,
-    ) {}
+        string $id,
+        ?string $name,
+        ?string $completeName,
+        ?string $commercialCompanyName,
+        ?string $email,
+        ?string $street,
+        ?string $street2,
+        ?string $zip,
+        ?string $city
+    ) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->completeName = $completeName;
+        $this->commercialCompanyName = $commercialCompanyName;
+        $this->email = $email;
+        $this->street = $street;
+        $this->street2 = $street2;
+        $this->zip = $zip;
+        $this->city = $city;
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data["id"],
-            name: $data["name"] ?? null,
-            completeName: $data["complete_name"] ?? null,
-            commercialCompanyName: $data["commercial_company_name"] ?? null,
-            email: $data["email_normalized"] ?? null,
-            street: $data["street"] ?? null,
-            street2: $data["street2"] ?? null,
-            zip: $data["zip"] ?? null,
-            city: $data["city"] ?? null
+            $data["id"],
+            $data["name"] ?? null,
+            $data["complete_name"] ?? null,
+            $data["commercial_company_name"] ?? null,
+            $data["email_normalized"] ?? null,
+            $data["street"] ?? null,
+            $data["street2"] ?? null,
+            $data["zip"] ?? null,
+            $data["city"] ?? null
         );
     }
 }

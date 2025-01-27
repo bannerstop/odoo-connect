@@ -6,22 +6,34 @@ use DateTimeImmutable;
 
 class InvoiceDTO
 {
+    public string $id;
+    public ?float $amountTotal;
+    public ?float $amountUntaxed;
+    public ?float $amountResidual;
+    public DateTimeImmutable $createDate;
+
     public function __construct(
-        public readonly string $id,
-        public readonly ?float $amountTotal,
-        public readonly ?float $amountUntaxed,
-        public readonly ?float $amountResidual,
-        public readonly DateTimeImmutable $createDate,
-    ) {}
+        string $id,
+        ?float $amountTotal,
+        ?float $amountUntaxed,
+        ?float $amountResidual,
+        DateTimeImmutable $createDate
+    ) {
+        $this->id = $id;
+        $this->amountTotal = $amountTotal;
+        $this->amountUntaxed = $amountUntaxed;
+        $this->amountResidual = $amountResidual;
+        $this->createDate = $createDate;
+    }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            id: $data["name"],
-            amountTotal: $data['amount_total'] ?? null,
-            amountUntaxed: $data['amount_untaxed'] ?? null,
-            amountResidual: $data['amount_residual'] ?? null,
-            createDate: new DateTimeImmutable($data['create_date']),
+            $data["name"],
+            $data['amount_total'] ?? null,
+            $data['amount_untaxed'] ?? null,
+            $data['amount_residual'] ?? null,
+            new DateTimeImmutable($data['create_date'])
         );
     }
 }

@@ -6,11 +6,15 @@ use InvalidArgumentException;
 
 class OdooConnection
 {
-    public function __construct(
-        public readonly string $baseUrl,
-        public readonly string $apiKey,
-        public readonly string $db
-    ) {
+    private string $baseUrl;
+    private string $apiKey;
+    private string $db;
+
+    public function __construct(string $baseUrl, string $apiKey, string $db)
+    {
+        $this->baseUrl = $baseUrl;
+        $this->apiKey = $apiKey;
+        $this->db = $db;
         $this->validateUrl($baseUrl);
     }
 

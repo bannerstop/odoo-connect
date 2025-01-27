@@ -1,10 +1,10 @@
 <?php
 
-namespace Bannerstop\OdooConnect\Exceptions;
+namespace Bannerstop\OdooConnect\Exception;
 
 use Exception;
 
-class OdooException extends Exception
+class OdooApiException extends Exception
 {
     private ?string $odooMessage;
 
@@ -23,12 +23,12 @@ class OdooException extends Exception
         return $this->odooMessage;
     }
 
-    public static function fromOdooError(array $response): static
+    public static function fromOdooError(array $response)
     {
         $message = $response['message'] ?? 'Unknown error';
         $responseCode = $response['responseCode'] ?? 0;
 
-        return new static(
+        return new self(
             sprintf('Odoo API error: %s', $message),
             $responseCode,
             $message
