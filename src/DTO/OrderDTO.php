@@ -2,7 +2,6 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
-use Bannerstop\OdooConnect\Enum\State;
 use DateTimeImmutable;
 use DateTimeZone;
 
