@@ -122,7 +122,7 @@ class OrderService
      * Update order fields
      *
      * @param int $id The Odoo ID (not order ID)
-     * @param array<string, mixed> $fields Associative array of fields to update
+     * @param array<OrderField, mixed> $fields Associative array of fields to update
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
      */

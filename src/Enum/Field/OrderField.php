@@ -11,6 +11,7 @@ enum OrderField: string
     case CUSTOMER = 'partner_id';
     case CUSTOMER_SHIPPING = 'partner_shipping_id';
     case CUSTOMER_INVOICE = 'partner_invoice_id';
+    case ORDER_LINE = 'order_line';
     case AMOUNT_TOTAL = 'amount_total';
     case AMOUNT_UNTAXED = 'amount_untaxed';
     case AMOUNT_TAX = 'amount_tax';
