@@ -21,6 +21,7 @@ class OrderDTO
     public float $amountToInvoice;
     public array $tagIds;
     public array $invoiceIds;
+    public string $invoiceStatus;
     public ?DateTimeImmutable $dateProduction;
     public ?DateTimeImmutable $lifetime;
     public DateTimeImmutable $createDate;
@@ -40,6 +41,7 @@ class OrderDTO
         float $amountToInvoice,
         array $tagIds,
         array $invoiceIds,
+        string $invoiceStatus,
         ?DateTimeImmutable $dateProduction,
         ?DateTimeImmutable $lifetime,
         DateTimeImmutable $createDate
@@ -58,6 +60,7 @@ class OrderDTO
         $this->amountToInvoice = $amountToInvoice;
         $this->tagIds = $tagIds;
         $this->invoiceIds = $invoiceIds;
+        $this->invoiceStatus = $invoiceStatus;
         $this->dateProduction = $dateProduction;
         $this->lifetime = $lifetime;
         $this->createDate = $createDate;
@@ -82,6 +85,7 @@ class OrderDTO
             $data['amount_to_invoice'],
             array_column($data['tag_ids'] ?? [], 'id'),
             array_column($data['invoice_ids'] ?? [], 'id'),
+            $data['invoice_status'],
             $data['date_production'] ? new DateTimeImmutable($data['date_production'], $timezone) : null,
             $data['date_files'] ? new DateTimeImmutable($data['date_files'], $timezone) : null,
             new DateTimeImmutable($data['create_date'], $timezone)
