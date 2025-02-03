@@ -2,6 +2,7 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
+use Bannerstop\OdooConnect\Enum\InvoiceStatus;
 use Bannerstop\OdooConnect\Enum\State;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -23,6 +24,7 @@ class OrderDTO
         public readonly float $amountToInvoice,
         public readonly array $tagIds,
         public readonly array $invoiceIds,
+        public readonly InvoiceStatus $invoiceStatus,
         public readonly ?DateTimeImmutable $dateProduction,
         public readonly ?DateTimeImmutable $lifetime,
         public readonly DateTimeImmutable $createDate,
@@ -47,6 +49,7 @@ class OrderDTO
             amountToInvoice: $data['amount_to_invoice'],
             tagIds: array_column($data['tag_ids'] ?? [], 'id'),
             invoiceIds: array_column($data['invoice_ids'] ?? [], 'id'),
+            invoiceStatus: InvoiceStatus::from($data['invoice_status']),
             dateProduction: $data['date_production'] ? new DateTimeImmutable($data['date_production'], $timezone) : null,
             lifetime: $data['date_files'] ? new DateTimeImmutable($data['date_files'], $timezone) : null,
             createDate: new DateTimeImmutable($data['create_date'], $timezone)
