@@ -6,6 +6,7 @@ use Bannerstop\OdooConnect\Exception\OdooRecordNotFoundException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Bannerstop\OdooConnect\Exception\OdooClientException;
 use Bannerstop\OdooConnect\Exception\OdooApiException;
@@ -17,13 +18,17 @@ class OdooClient
 
     public function __construct(
         private readonly OdooConnection $connection,
-        private readonly int $requestsPerSecond = 3
+        private readonly int $requestsPerSecond = 3,
+        private readonly int $maxRetries = 3,
+        private readonly float $timeout = 10.0
     ) {
         $stack = HandlerStack::create();
 
         if ($this->requestsPerSecond > 0) {
             $stack->push(RateLimiterMiddleware::perSecond($this->requestsPerSecond));
         }
+
+        $stack->push($this->createRetryMiddleware());
 
         $this->httpClient = new GuzzleClient([
             'handler' => $stack,
@@ -33,7 +38,28 @@ class OdooClient
                 'Content-Type'  => 'application/json',
                 'Accept'        => 'application/json',
             ],
+            'timeout' => $this->timeout,
+            'connect_timeout' => $this->timeout
         ]);
+    }
+    
+    private function createRetryMiddleware(): callable
+    {
+        return Middleware::retry(
+            decider: function ($retries, $request, $response = null, $exception = null) {
+                $isRequestException = $exception instanceof RequestException;
+                $shouldRetry = $retries < $this->maxRetries && $isRequestException;
+    
+                if (!$shouldRetry && $isRequestException) {
+                    throw new OdooClientException(
+                        sprintf('Max retries (%d) reached with error: %s', $this->maxRetries, $exception->getMessage())
+                    );
+                }
+    
+                return $shouldRetry;
+            },
+            delay: fn($retries) => 1000 * 2 ** ($retries - 1)
+        );
     }
 
     public function getConnection(): OdooConnection
