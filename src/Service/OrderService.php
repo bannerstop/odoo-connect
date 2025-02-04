@@ -147,8 +147,8 @@ class OrderService
         $currentTimestamp = (new \DateTime())->format('Y-m-d H:i:s');
         
         return $this->updateOrderFields(
-            $id, 
-            ['date_jira_last_sync' => $currentTimestamp]
+            id: $id, 
+            fields: [OrderField::DATE_JIRA_LAST_SYNC => $currentTimestamp]
         );
     }
 }

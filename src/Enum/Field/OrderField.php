@@ -19,6 +19,8 @@ enum OrderField: string
     case TAG_IDS = 'tag_ids';
     case INVOICE_IDS = 'invoice_ids';
     case DATE_PRODUCTION = 'date_production';
+    case DATE_PROOF_ACCEPTANCE = "date_proof_acceptance";
+    case DATE_JIRA_LAST_SYNC = "date_jira_last_sync";
     case LIFETIME = 'date_files';
     case CREATE_DATE = 'create_date';
 }
