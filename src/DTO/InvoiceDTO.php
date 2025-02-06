@@ -2,6 +2,7 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
+use Bannerstop\OdooConnect\Utils\DateTimeHelper;
 use DateTimeImmutable;
 
 class InvoiceDTO
@@ -21,7 +22,7 @@ class InvoiceDTO
             amountTotal: $data['amount_total'] ?? null,
             amountUntaxed: $data['amount_untaxed'] ?? null,
             amountResidual: $data['amount_residual'] ?? null,
-            createDate: new DateTimeImmutable($data['create_date']),
+            createDate: DateTimeHelper::createFromString($data['create_date'])
         );
     }
 }

@@ -4,8 +4,8 @@ namespace Bannerstop\OdooConnect\DTO;
 
 use Bannerstop\OdooConnect\Enum\InvoiceStatus;
 use Bannerstop\OdooConnect\Enum\State;
+use Bannerstop\OdooConnect\Utils\DateTimeHelper;
 use DateTimeImmutable;
-use DateTimeZone;
 
 class OrderDTO
 {
@@ -33,8 +33,6 @@ class OrderDTO
 
     public static function fromArray(array $data): self
     {
-        $timezone = new DateTimeZone('Europe/Berlin');
-
         return new self(
             id: $data["id"],
             orderId: $data["name"],
@@ -52,9 +50,9 @@ class OrderDTO
             invoiceIds: array_column($data['invoice_ids'] ?? [], 'id'),
             itemCount: isset($data['order_line']) ? count($data['order_line']) : 0,
             invoiceStatus: InvoiceStatus::from($data['invoice_status']),
-            dateProduction: $data['date_production'] ? new DateTimeImmutable($data['date_production'], $timezone) : null,
-            lifetime: $data['date_files'] ? new DateTimeImmutable($data['date_files'], $timezone) : null,
-            createDate: new DateTimeImmutable($data['create_date'], $timezone)
+            dateProduction: DateTimeHelper::createFromString($data['date_production']),
+            lifetime: DateTimeHelper::createFromString($data['date_files']),
+            createDate: DateTimeHelper::createFromString($data['create_date'])
         );
     }
 }
