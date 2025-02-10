@@ -148,7 +148,7 @@ class OrderService
         
         return $this->updateOrderFields(
             id: $id, 
-            fields: [OrderField::DATE_JIRA_LAST_SYNC => $currentTimestamp]
+            fields: [OrderField::DATE_JIRA_LAST_SYNC->value => $currentTimestamp]
         );
     }
 }
