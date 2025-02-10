@@ -26,6 +26,7 @@ class OrderDTO
         public readonly array $invoiceIds,
         public readonly int $itemCount,
         public readonly InvoiceStatus $invoiceStatus,
+        public readonly ?DateTimeImmutable $dateProofAcceptance,
         public readonly ?DateTimeImmutable $dateProduction,
         public readonly ?DateTimeImmutable $lifetime,
         public readonly DateTimeImmutable $createDate,
@@ -50,9 +51,10 @@ class OrderDTO
             invoiceIds: array_column($data['invoice_ids'] ?? [], 'id'),
             itemCount: isset($data['order_line']) ? count($data['order_line']) : 0,
             invoiceStatus: InvoiceStatus::from($data['invoice_status']),
-            dateProduction: DateTimeHelper::createFromString($data['date_production']),
-            lifetime: DateTimeHelper::createFromString($data['date_files']),
-            createDate: DateTimeHelper::createFromString($data['create_date'])
+            dateProofAcceptance: DateTimeHelper::createFromString(dateString: $data['date_proof_acceptance'], hourOffset: null),
+            dateProduction: DateTimeHelper::createFromString(dateString: $data['date_production']),
+            lifetime: DateTimeHelper::createFromString(dateString: $data['date_files']),
+            createDate: DateTimeHelper::createFromString(dateString: $data['create_date'])
         );
     }
 }
