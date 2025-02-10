@@ -4,6 +4,7 @@ namespace Bannerstop\OdooConnect\Client;
 
 use Bannerstop\OdooConnect\Exception\OdooRecordNotFoundException;
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -47,10 +48,10 @@ class OdooClient
     {
         return Middleware::retry(
             decider: function ($retries, $request, $response = null, $exception = null) {
-                $isRequestException = $exception instanceof RequestException;
-                $shouldRetry = $retries < $this->maxRetries && $isRequestException;
+                $isTransferException = $exception instanceof TransferException;
+                $shouldRetry = $retries < $this->maxRetries && $isTransferException;
     
-                if (!$shouldRetry && $isRequestException) {
+                if (!$shouldRetry && $isTransferException) {
                     throw new OdooClientException(
                         sprintf('Max retries (%d) reached with error: %s', $this->maxRetries, $exception->getMessage())
                     );
