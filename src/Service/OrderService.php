@@ -56,8 +56,8 @@ class OrderService
     {
         $request = $this->requestBuilder
             ->model(Model::SALE_ORDER)
-            ->where('create_date', '>=', $startDate)
-            ->where('create_date', '<=', $endDate);
+            ->where('date_order', '>=', $startDate)
+            ->where('date_order', '<=', $endDate);
     
         if ($type !== null) {
             $request->state($type);
