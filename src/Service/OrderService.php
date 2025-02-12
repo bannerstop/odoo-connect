@@ -158,13 +158,15 @@ class OrderService
      * Update order's date proof acceptance timestamp
      *
      * @param int $id The Odoo ID (not order ID)
-     * @param DateTime|null $date DateTime object in UTC timezone, defaults to current time
+     * @param DateTime|null $date DateTime object, defaults to current time
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
      */
     public function updateOrderDateProofAcceptance(int $id, ?DateTime $date = null): bool
     {
-        $timestamp = $date ?? (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        $timestamp = ($date ? clone $date : new DateTime('now'))
+            ->setTimezone(new DateTimeZone('UTC'))
+            ->format('Y-m-d H:i:s');
 
         return $this->updateOrderFields(
             id: $id,
