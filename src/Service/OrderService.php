@@ -10,6 +10,8 @@ use Bannerstop\OdooConnect\DTO\OrderDTO;
 use Bannerstop\OdooConnect\DTO\OrderItemDTO;
 use Bannerstop\OdooConnect\Enum\State;
 use Bannerstop\OdooConnect\Exception\OdooRecordNotFoundException;
+use DateTime;
+use DateTimeZone;
 use InvalidArgumentException;
 
 class OrderService
@@ -144,11 +146,29 @@ class OrderService
      */
     public function updateOrderLastJiraSync(int $id): bool
     {
-        $currentTimestamp = (new \DateTime())->format('Y-m-d H:i:s');
+        $currentTimestamp = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
         
         return $this->updateOrderFields(
             id: $id, 
             fields: [OrderField::DATE_JIRA_LAST_SYNC->value => $currentTimestamp]
+        );
+    }
+
+    /**
+     * Update order's date proof acceptance timestamp
+     *
+     * @param int $id The Odoo ID (not order ID)
+     * @param DateTime|null $date DateTime object in UTC timezone, defaults to current time
+     * @return bool True if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateOrderDateProofAcceptance(int $id, ?DateTime $date = null): bool
+    {
+        $timestamp = $date ?? (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+
+        return $this->updateOrderFields(
+            id: $id,
+            fields: [OrderField::DATE_PROOF_ACCEPTANCE->value => $timestamp]
         );
     }
 }
