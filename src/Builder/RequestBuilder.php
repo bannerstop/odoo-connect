@@ -20,6 +20,11 @@ class RequestBuilder
         $this->queryBuilder = new QueryBuilder();
     }
 
+    public function getClient(): OdooClient
+    {
+        return $this->client;
+    }
+
     public function model(Model $model): self
     {
         $this->model = $model;

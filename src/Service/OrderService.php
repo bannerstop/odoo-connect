@@ -20,6 +20,11 @@ class OrderService
         private readonly RequestBuilder $requestBuilder
     ) {}
 
+    private function getOdooTimezone(): DateTimeZone
+    {
+        return $this->requestBuilder->getClient()->getConfig()->getOdooTimezone();
+    }
+
     /**
      * Get order by its Odoo order ID
      *
@@ -146,7 +151,7 @@ class OrderService
      */
     public function updateOrderLastJiraSync(int $id): bool
     {
-        $currentTimestamp = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+        $currentTimestamp = (new DateTime('now', $this->getOdooTimezone()))->format('Y-m-d H:i:s');
         
         return $this->updateOrderFields(
             id: $id, 
@@ -165,7 +170,7 @@ class OrderService
     public function updateOrderDateProofAcceptance(int $id, ?DateTime $date = null): bool
     {
         $timestamp = ($date ? clone $date : new DateTime('now'))
-            ->setTimezone(new DateTimeZone('UTC'))
+            ->setTimezone($this->getOdooTimezone())
             ->format('Y-m-d H:i:s');
 
         return $this->updateOrderFields(
