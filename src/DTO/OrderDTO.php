@@ -2,10 +2,10 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
+use Bannerstop\OdooConnect\Config\Config;
 use Bannerstop\OdooConnect\Enum\InvoiceStatus;
 use Bannerstop\OdooConnect\Enum\State;
 use DateTimeImmutable;
-use DateTimeZone;
 
 class OrderDTO
 {
@@ -32,10 +32,8 @@ class OrderDTO
         public readonly DateTimeImmutable $createDate,
     ) {}
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data, Config $config): self
     {
-        $timezone = new DateTimeZone('UTC');
-
         return new self(
             id: $data["id"],
             orderId: $data["name"],
@@ -53,10 +51,20 @@ class OrderDTO
             invoiceIds: array_column($data['invoice_ids'] ?? [], 'id'),
             itemCount: isset($data['order_line']) ? count($data['order_line']) : 0,
             invoiceStatus: InvoiceStatus::from($data['invoice_status']),
-            dateProofAcceptance: $data['date_proof_acceptance'] ? new DateTimeImmutable($data['date_proof_acceptance'], $timezone) : null,
-            dateProduction: $data['date_production'] ? new DateTimeImmutable($data['date_production'], $timezone) : null,
-            lifetime: $data['date_files'] ? new DateTimeImmutable($data['date_files'], $timezone) : null,
-            createDate: new DateTimeImmutable($data['create_date'], $timezone)
+            dateProofAcceptance: $data['date_proof_acceptance'] 
+                ? (new DateTimeImmutable($data['date_proof_acceptance'], $config->getOdooTimezone()))
+                    ->setTimezone($config->getReturnDataTimezone())
+                : null,
+            dateProduction: $data['date_production']
+                ? (new DateTimeImmutable($data['date_production'], $config->getOdooTimezone()))
+                    ->setTimezone($config->getReturnDataTimezone())
+                : null,
+            lifetime: $data['date_files']
+                ? (new DateTimeImmutable($data['date_files'], $config->getOdooTimezone()))
+                    ->setTimezone($config->getReturnDataTimezone())
+                : null,
+            createDate: (new DateTimeImmutable($data['create_date'], $config->getOdooTimezone()))
+                ->setTimezone($config->getReturnDataTimezone())
         );
     }
 }

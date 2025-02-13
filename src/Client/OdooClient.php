@@ -2,6 +2,7 @@
 
 namespace Bannerstop\OdooConnect\Client;
 
+use Bannerstop\OdooConnect\Config\Config;
 use Bannerstop\OdooConnect\Exception\OdooRecordNotFoundException;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\TransferException;
@@ -19,6 +20,7 @@ class OdooClient
 
     public function __construct(
         private readonly OdooConnection $connection,
+        private readonly Config $config = new Config(),
         private readonly int $requestsPerSecond = 3,
         private readonly int $maxRetries = 3,
         private readonly float $timeout = 10.0
@@ -61,6 +63,11 @@ class OdooClient
             },
             delay: fn($retries) => 1000 * 2 ** ($retries - 1)
         );
+    }
+    
+    public function getConfig(): Config
+    {
+        return $this->config;
     }
 
     public function getConnection(): OdooConnection

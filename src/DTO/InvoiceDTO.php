@@ -2,8 +2,8 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
+use Bannerstop\OdooConnect\Config\Config;
 use DateTimeImmutable;
-use DateTimeZone;
 
 class InvoiceDTO
 {
@@ -15,16 +15,15 @@ class InvoiceDTO
         public readonly DateTimeImmutable $createDate,
     ) {}
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data, Config $config): self
     {
-        $timezone = new DateTimeZone('UTC');
-
         return new self(
             id: $data["name"],
             amountTotal: $data['amount_total'] ?? null,
             amountUntaxed: $data['amount_untaxed'] ?? null,
             amountResidual: $data['amount_residual'] ?? null,
-            createDate: new DateTimeImmutable($data['create_date'], $timezone)
+            createDate: (new DateTimeImmutable($data['create_date'], $config->getOdooTimezone()))
+                ->setTimezone($config->getReturnDataTimezone())
         );
     }
 }

@@ -65,7 +65,7 @@ class RequestBuilder
     {
         $rawData = $this->getRaw();
         return array_map(
-            fn(array $item) => ModelDTOMapper::map($this->model, $item),
+            fn(array $item) => ModelDTOMapper::map($this->model, $item, $this->client->getConfig()),
             $rawData
         );
     }
