@@ -87,12 +87,15 @@ class OrderService
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getOrderByShopOrderId(string $shopOrderId, ?array $fields = null): OrderDTO|array
+    public function getOrderByShopOrderId(string $shopOrderId, ?State $type = STATE::SALES_ORDER, ?array $fields = null): OrderDTO|array
     {
         $request = $this->requestBuilder
             ->model(Model::SALE_ORDER)
-            ->where('client_order_ref', '=', $shopOrderId)
-            ->where('state', '!=', 'draft');
+            ->where('client_order_ref', '=', $shopOrderId);
+
+        if ($type !== null) {
+            $request->state($type);
+        }
 
         if ($fields !== null) {
             $request->fields($fields);
