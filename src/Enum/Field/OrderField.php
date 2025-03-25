@@ -23,4 +23,5 @@ enum OrderField: string
     case DATE_JIRA_LAST_SYNC = "date_jira_last_sync";
     case LIFETIME = 'date_files';
     case CREATE_DATE = 'create_date';
+    case BS_TRACKING_CODE_IDS = 'bs_tracking_code_ids';
 }

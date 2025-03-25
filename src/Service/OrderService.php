@@ -108,8 +108,8 @@ class OrderService
     /**
      * Get order line items for a specific order
      *
-     * @param string $orderId The Odoo order ID
-     * @param OrderItemField[]|null $fields The fields to retrieve
+     * @param string $orderId Odoo order ID
+     * @param OrderItemField[]|null $fields Fields to retrieve
      * @return OrderItemDTO[]|array Array of OrderItem objects or an array with specified fields
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
@@ -131,7 +131,7 @@ class OrderService
     /**
      * Update order fields
      *
-     * @param int $id The Odoo ID (not order ID)
+     * @param int $id Odoo internal ID (not order ID)
      * @param array<OrderField, mixed> $fields Associative array of fields to update
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
@@ -148,7 +148,7 @@ class OrderService
     /**
      * Update order's last Jira sync timestamp
      *
-     * @param int $id The Odoo ID (not order ID)
+     * @param int $id Odoo internal ID (not order ID)
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
      */
@@ -165,7 +165,7 @@ class OrderService
     /**
      * Update order's date proof acceptance timestamp
      *
-     * @param int $id The Odoo ID (not order ID)
+     * @param int $id Odoo internal ID (not order ID)
      * @param DateTime|null $date DateTime object, defaults to current time
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
@@ -179,6 +179,35 @@ class OrderService
         return $this->updateOrderFields(
             id: $id,
             fields: [OrderField::DATE_PROOF_ACCEPTANCE->value => $timestamp]
+        );
+    }
+
+    /**
+     * Add a tracking code to an order
+     *
+     * @param string $orderId Order ID / name to associate with the tracking code
+     * @param string $carrier Name / symbol of the carrier (shipping provider)
+     * @param string $trackingCode Tracking code / number
+     * @param int|null $id Odoo internal ID (not order ID), if null valid orderId must be provided
+     * @return bool True if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function addTrackingCode(string $orderId, string $carrier, string $trackingCode, ?int $id = null): bool
+    {
+        if ($id === null) {
+            $orderData = $this->getOrderByOrderId($orderId, [OrderField::ID]);
+            $id = $orderData[OrderField::ID->value];
+        }
+    
+        return $this->updateOrderFields(
+            id: $id,
+            fields: [
+                OrderField::BS_TRACKING_CODE_IDS->value => [[0, 0, [
+                    'name' => $orderId,
+                    'carrier' => $carrier,
+                    'code' => $trackingCode
+                ]]]
+            ]
         );
     }
 }
