@@ -17,7 +17,9 @@ class OrderDTO
         public readonly int $customerId,
         public readonly string $customerName,
         public readonly int $customerShippingId,
+        public readonly string $customerShippingName,
         public readonly int $customerInvoiceId,
+        public readonly string $customerInvoiceName,
         public readonly float $amountTotal,
         public readonly float $amountUntaxed,
         public readonly float $amountTax,
@@ -30,6 +32,7 @@ class OrderDTO
         public readonly ?DateTimeImmutable $dateProduction,
         public readonly ?DateTimeImmutable $lifetime,
         public readonly DateTimeImmutable $createDate,
+        public readonly DateTimeImmutable $dateOrder,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -42,7 +45,9 @@ class OrderDTO
             customerId: $data['partner_id'][0]["id"],
             customerName: $data['partner_id'][0]["name"],
             customerShippingId: $data["partner_shipping_id"][0]["id"],
+            customerShippingName: $data["partner_shipping_id"][0]["name"],
             customerInvoiceId: $data["partner_invoice_id"][0]["id"],
+            customerInvoiceName: $data["partner_invoice_id"][0]["name"],
             amountTotal: $data['amount_total'],
             amountUntaxed: $data['amount_untaxed'],
             amountTax: $data['amount_tax'],
@@ -64,7 +69,9 @@ class OrderDTO
                     ->setTimezone($config->getReturnDataTimezone())
                 : null,
             createDate: (new DateTimeImmutable($data['create_date'], $config->getOdooTimezone()))
-                ->setTimezone($config->getReturnDataTimezone())
+                ->setTimezone($config->getReturnDataTimezone()),
+            dateOrder: (new DateTimeImmutable($data['date_order'], $config->getOdooTimezone()))
+                ->setTimezone($config->getReturnDataTimezone()),
         );
     }
 }
