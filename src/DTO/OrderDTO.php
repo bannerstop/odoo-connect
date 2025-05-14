@@ -40,7 +40,7 @@ class OrderDTO
         return new self(
             id: $data["id"],
             orderId: $data["name"],
-            state: State::from($data['state']),
+            state: State::safeFrom($data['state']),
             shopOrderId: $data['client_order_ref'] ?: null,
             customerId: $data['partner_id'][0]["id"],
             customerName: $data['partner_id'][0]["name"],
@@ -55,7 +55,7 @@ class OrderDTO
             tagIds: array_column($data['tag_ids'] ?? [], 'id'),
             invoiceIds: array_column($data['invoice_ids'] ?? [], 'id'),
             itemCount: isset($data['order_line']) ? count($data['order_line']) : 0,
-            invoiceStatus: InvoiceStatus::from($data['invoice_status']),
+            invoiceStatus: InvoiceStatus::safeFrom($data['invoice_status']),
             dateProofAcceptance: $data['date_proof_acceptance'] 
                 ? (new DateTimeImmutable($data['date_proof_acceptance'], $config->getOdooTimezone()))
                     ->setTimezone($config->getReturnDataTimezone())

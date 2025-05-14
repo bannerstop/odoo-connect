@@ -8,4 +8,10 @@ enum State: string
     case INTERMEDIATE = 'sent';
     case SALES_ORDER = 'sale';
     case CANCEL = 'cancel';
+    case UNKNOWN = 'unknown';
+
+    public static function safeFrom(string $value): self
+    {
+        return self::tryFrom($value) ?? self::UNKNOWN;
+    }
 }
