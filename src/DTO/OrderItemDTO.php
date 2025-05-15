@@ -6,6 +6,7 @@ namespace Bannerstop\OdooConnect\DTO;
 class OrderItemDTO
 {
     public function __construct(
+        public readonly ?int $id,
         public readonly ?string $productName,
         public readonly ?int $productId,
         public readonly ?string $productDescription,
@@ -20,6 +21,7 @@ class OrderItemDTO
     public static function fromArray(array $data): self
     {
         return new self(
+            id: $data['id'] ?? null,
             productName: $data['product_id'][0]['name'] ?? null,
             productId: $data['product_id'][0]['id'] ?? null,
             productDescription: $data['name'] ?? null,
