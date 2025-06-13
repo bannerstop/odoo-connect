@@ -19,4 +19,5 @@ enum PurchaseOrderField: string
     case DATE_PLANNED = 'date_planned';
     case NOTES = 'notes';
     case INVOICE_STATUS = 'invoice_status';
+    case ORIGIN = 'origin';
 }

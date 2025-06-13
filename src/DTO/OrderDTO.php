@@ -33,6 +33,7 @@ class OrderDTO
         public readonly ?DateTimeImmutable $lifetime,
         public readonly DateTimeImmutable $createDate,
         public readonly DateTimeImmutable $dateOrder,
+        public readonly string $origin,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -72,6 +73,7 @@ class OrderDTO
                 ->setTimezone($config->getReturnDataTimezone()),
             dateOrder: (new DateTimeImmutable($data['date_order'], $config->getOdooTimezone()))
                 ->setTimezone($config->getReturnDataTimezone()),
+            origin: $data['origin'],
         );
     }
 }

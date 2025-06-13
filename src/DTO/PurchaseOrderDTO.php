@@ -26,6 +26,7 @@ class PurchaseOrderDTO
         public readonly ?DateTimeImmutable $dateDelivery,
         public readonly ?string $notes,
         public readonly InvoiceStatus $invoiceStatus,
+        public readonly string $origin,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -55,6 +56,7 @@ class PurchaseOrderDTO
                 : null,
             notes: $data['notes'] ?? null,
             invoiceStatus: InvoiceStatus::safeFrom($data['invoice_status']),
+            origin: $data['origin'],
         );
     }
 }
