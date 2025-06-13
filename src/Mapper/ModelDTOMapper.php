@@ -7,6 +7,7 @@ use Bannerstop\OdooConnect\DTO\CustomerDTO;
 use Bannerstop\OdooConnect\DTO\OrderDTO;
 use Bannerstop\OdooConnect\DTO\OrderItemDTO;
 use Bannerstop\OdooConnect\DTO\InvoiceDTO;
+use Bannerstop\OdooConnect\DTO\PurchaseOrderDTO;
 use Bannerstop\OdooConnect\Enum\Model;
 use InvalidArgumentException;
 
@@ -19,6 +20,7 @@ class ModelDTOMapper
             Model::SALE_ORDER_LINE => OrderItemDTO::fromArray($data),
             Model::ACCOUNT_MOVE => InvoiceDTO::fromArray($data, $config),
             Model::RES_PARTNER => CustomerDTO::fromArray($data),
+            Model::PURCHASE_ORDER => PurchaseOrderDTO::fromArray($data, $config),
             default => throw new InvalidArgumentException("No mapping defined for model: {$model->value}")
         };
     }
