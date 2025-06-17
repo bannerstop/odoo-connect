@@ -9,4 +9,5 @@ enum Model: string
     case ACCOUNT_MOVE = 'account.move';
     case RES_PARTNER = 'res.partner';
     case PURCHASE_ORDER = 'purchase.order';
+    case BS_TRACKING_CODE = 'bs_tracking_code';
 }
