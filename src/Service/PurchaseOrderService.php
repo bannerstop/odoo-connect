@@ -26,7 +26,7 @@ class PurchaseOrderService
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getPurchaseOrdersByName(string $purchaseOrderName, ?array $fields = null): PurchaseOrderDTO|array
+    public function getPurchaseOrdersByName(string $purchaseOrderName, ?array $fields = null): array
     {
         $request = $this->requestBuilder
             ->model(Model::PURCHASE_ORDER)
