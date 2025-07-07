@@ -205,7 +205,8 @@ class OrderService
                 OrderField::BS_TRACKING_CODE_IDS->value => [[0, 0, [
                     'name' => $orderId,
                     'carrier' => $carrier,
-                    'code' => $trackingCode
+                    'code' => $trackingCode,
+                    'sale_order_id' => $id
                 ]]]
             ]
         );
