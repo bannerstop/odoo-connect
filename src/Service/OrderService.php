@@ -189,26 +189,23 @@ class OrderService
      * @param string $carrier Name / symbol of the carrier (shipping provider)
      * @param string $trackingCode Tracking code / number
      * @param int|null $id Odoo internal ID (not order ID), if null valid orderId must be provided
-     * @return bool True if update was successful
+     * @return int ID of the created tracking code entity
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function addTrackingCode(string $orderId, string $carrier, string $trackingCode, ?int $id = null): bool
+    public function addTrackingCode(string $orderId, string $carrier, string $trackingCode, ?int $id = null): int
     {
         if ($id === null) {
             $orderData = $this->getOrderByOrderId($orderId, [OrderField::ID]);
             $id = $orderData[OrderField::ID->value];
         }
-    
-        return $this->updateOrderFields(
-            id: $id,
-            fields: [
-                OrderField::BS_TRACKING_CODE_IDS->value => [[0, 0, [
-                    'name' => $orderId,
-                    'carrier' => $carrier,
-                    'code' => $trackingCode,
-                    'sale_order_id' => $id
-                ]]]
-            ]
-        );
+
+        return $this->requestBuilder
+            ->model(Model::BS_TRACKING_CODE)
+            ->create([
+                'name' => $orderId,
+                'carrier' => $carrier,
+                'code' => $trackingCode,
+                'sale_order_id' => $id
+            ]);
     }
 }

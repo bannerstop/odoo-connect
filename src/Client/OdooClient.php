@@ -106,6 +106,6 @@ class OdooClient
             throw OdooApiException::fromOdooError($body);
         }
 
-        return $body['data'] ?? [];
+        return $body['data'] ?? (isset($body['create_id']) ? ['create_id' => $body['create_id']] : []);
     }
 }

@@ -16,25 +16,25 @@ class TrackingCodeService
     ) {}
 
     /**
-     * Search tracking codes by name and/or code
+     * Search tracking codes by Order ID and/or code
      *
-     * @param string|null $name Order name to search for
+     * @param string|null $orderId Order ID to search for
      * @param string|null $code Tracking code to search for
      * @param TrackingCodeField[]|null $fields Fields to retrieve
      * @return TrackingCodeDTO[]|array Array of TrackingCodeDTO objects or an array with specified fields
-     * @throws InvalidArgumentException When both name and code are null or when mapping fails
+     * @throws InvalidArgumentException When both orderId and code are null or when mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function searchTrackingCodes(?string $name = null, ?string $code = null, ?array $fields = null): array
+    public function searchTrackingCodes(?string $orderId = null, ?string $code = null, ?array $fields = null): array
     {
-        if ($name === null && $code === null) {
-            throw new InvalidArgumentException('At least one search parameter (name or code) must be provided');
+        if ($orderId === null && $code === null) {
+            throw new InvalidArgumentException('At least one search parameter (orderId or code) must be provided');
         }
 
         $request = $this->requestBuilder->model(Model::BS_TRACKING_CODE);
 
-        if ($name !== null) {
-            $request->where('name', '=', $name);
+        if ($orderId !== null) {
+            $request->where('sale_order_id', '=', $orderId);
         }
 
         if ($code !== null) {

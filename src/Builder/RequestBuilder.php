@@ -4,6 +4,7 @@ namespace Bannerstop\OdooConnect\Builder;
 
 use Bannerstop\OdooConnect\Client\OdooClient;
 use Bannerstop\OdooConnect\Enum\State;
+use Bannerstop\OdooConnect\Exception\OdooApiException;
 use Bannerstop\OdooConnect\Mapper\ModelDTOMapper;
 use Bannerstop\OdooConnect\Enum\Model;
 
@@ -101,5 +102,21 @@ class RequestBuilder
         ]);
         
         return true;
+    }
+
+    public function create(array $fields): int
+    {
+        $endpoint = sprintf('/api/%s/create', $this->model->value);
+
+        $response = $this->client->request('POST', $endpoint, [
+            'query' => ['db' => $this->client->getConnection()->getDb()],
+            'json' => $fields
+        ]);
+
+        if (!isset($response['create_id'])) {
+            throw new OdooApiException('Failed to create entity in Odoo API.');
+        }
+
+        return $response['create_id'][0];
     }
 }
