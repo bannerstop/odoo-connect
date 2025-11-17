@@ -202,7 +202,7 @@ class OrderService
         return $this->requestBuilder
             ->model(Model::BS_TRACKING_CODE)
             ->create([
-                'name' => $orderId,
+                'name' => $trackingCode,
                 'carrier' => $carrier,
                 'code' => $trackingCode,
                 'sale_order_id' => $id
