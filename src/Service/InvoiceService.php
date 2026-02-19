@@ -35,7 +35,7 @@ class InvoiceService
 
         $request = $this->requestBuilder
             ->model(Model::ACCOUNT_MOVE)
-            ->where('ref', '=', $shopOrderId);
+            ->where('ref', 'like', $shopOrderId);
             
         if ($fields !== null) {
             $request->fields($fields);
