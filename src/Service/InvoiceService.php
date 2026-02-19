@@ -46,6 +46,33 @@ class InvoiceService
     }
 
     /**
+     * Get invoices by Odoo order ID
+     *
+     * @param string $orderId Odoo order ID (e.g. S00123)
+     * @param InvoiceField[]|null $fields Fields to retrieve
+     * @return InvoiceDTO[]|array Array of InvoiceDTO objects or an array of invoices with specified fields
+     * @throws InvalidArgumentException When mapping fails or order ID is empty
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function getInvoicesByOrderId(string $orderId, ?array $fields = null): array
+    {
+        if (empty($orderId)) {
+            throw new InvalidArgumentException('Order ID cannot be null or empty');
+        }
+
+        $request = $this->requestBuilder
+            ->model(Model::ACCOUNT_MOVE)
+            ->where('invoice_origin', 'like', $orderId);
+
+        if ($fields !== null) {
+            $request->fields($fields);
+            return $request->getRaw();
+        }
+
+        return $request->get();
+    }
+
+    /**
      * Get invoice by Odoo invoice ID
      *
      * @param string $invoiceId Odoo invoice ID
