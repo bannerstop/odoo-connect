@@ -13,4 +13,5 @@ enum CustomerField: string
     case STREET2 = 'street2';
     case ZIP = 'zip';
     case CITY = 'city';
+    case COUNTRY_ID = 'country_id';
 }

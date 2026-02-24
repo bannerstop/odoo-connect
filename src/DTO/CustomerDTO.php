@@ -14,6 +14,7 @@ class CustomerDTO
         public readonly ?string $street2,
         public readonly ?string $zip,
         public readonly ?string $city,
+        public readonly ?string $countryName,
     ) {}
 
     public static function fromArray(array $data): self
@@ -27,7 +28,8 @@ class CustomerDTO
             street: $data["street"] ?? null,
             street2: $data["street2"] ?? null,
             zip: $data["zip"] ?? null,
-            city: $data["city"] ?? null
+            city: $data["city"] ?? null,
+            countryName: $data["country_id"][0]["name"] ?? null,
         );
     }
 }
