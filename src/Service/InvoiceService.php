@@ -24,21 +24,38 @@ class InvoiceService
      * @throws InvalidArgumentException When mapping fails or shop order ID is empty
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getInvoicesByShopOrderId(string $shopOrderId, ?array $fields = null): array
-    {
+    public function getInvoicesByShopOrderId(
+        string $shopOrderId,
+        ?array $fields = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $order = null,
+    ): array {
         if (empty($shopOrderId)) {
             throw new InvalidArgumentException('Shop order ID cannot be null or empty');
         }
 
-        $request =  $this->requestBuilder
+        $request = $this->requestBuilder
             ->model(Model::ACCOUNT_MOVE)
             ->where('ref', '=', $shopOrderId);
-            
+
+        if ($limit !== null) {
+            $request->limit($limit);
+        }
+
+        if ($offset !== null) {
+            $request->offset($offset);
+        }
+
+        if ($order !== null) {
+            $request->order($order);
+        }
+
         if ($fields !== null) {
             $request->fields($fields);
             return $request->getRaw();
         }
-        
+
         return $request->get();
     }
 

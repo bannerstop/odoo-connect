@@ -26,11 +26,28 @@ class PurchaseOrderService
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getPurchaseOrdersByName(string $purchaseOrderName, ?array $fields = null): array
-    {
+    public function getPurchaseOrdersByName(
+        string $purchaseOrderName,
+        ?array $fields = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $order = null,
+    ): array {
         $request = $this->requestBuilder
             ->model(Model::PURCHASE_ORDER)
             ->where('name', '=', $purchaseOrderName);
+
+        if ($limit !== null) {
+            $request->limit($limit);
+        }
+
+        if ($offset !== null) {
+            $request->offset($offset);
+        }
+
+        if ($order !== null) {
+            $request->order($order);
+        }
 
         if ($fields !== null) {
             $request->fields($fields);
@@ -51,8 +68,15 @@ class PurchaseOrderService
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getPurchaseOrdersByDate(string $startDate, string $endDate, ?PurchaseState $state = null, ?array $fields = null): array
-    {
+    public function getPurchaseOrdersByDate(
+        string $startDate,
+        string $endDate,
+        ?PurchaseState $state = null,
+        ?array $fields = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $order = null,
+    ): array {
         $request = $this->requestBuilder
             ->model(Model::PURCHASE_ORDER)
             ->where('date_order', '>=', $startDate)
@@ -60,6 +84,18 @@ class PurchaseOrderService
 
         if ($state !== null) {
             $request->where('state', '=', $state);
+        }
+
+        if ($limit !== null) {
+            $request->limit($limit);
+        }
+
+        if ($offset !== null) {
+            $request->offset($offset);
+        }
+
+        if ($order !== null) {
+            $request->order($order);
         }
 
         if ($fields !== null) {

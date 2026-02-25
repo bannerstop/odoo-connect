@@ -59,22 +59,41 @@ class OrderService
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getOrdersByDate(string $startDate, string $endDate, ?State $type = null, ?array $fields = null): array
-    {
+    public function getOrdersByDate(
+        string $startDate,
+        string $endDate,
+        ?State $type = null,
+        ?array $fields = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $order = null,
+    ): array {
         $request = $this->requestBuilder
             ->model(Model::SALE_ORDER)
             ->where('date_order', '>=', $startDate)
             ->where('date_order', '<=', $endDate);
-    
+
         if ($type !== null) {
             $request->state($type);
+        }
+
+        if ($limit !== null) {
+            $request->limit($limit);
+        }
+
+        if ($offset !== null) {
+            $request->offset($offset);
+        }
+
+        if ($order !== null) {
+            $request->order($order);
         }
 
         if ($fields !== null) {
             $request->fields($fields);
             return $request->getRaw();
         }
-    
+
         return $request->get();
     }
 
@@ -114,11 +133,28 @@ class OrderService
      * @throws InvalidArgumentException When mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function getOrderItemsByOrderId(string $orderId, ?array $fields = null): array
-    {
+    public function getOrderItemsByOrderId(
+        string $orderId,
+        ?array $fields = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $order = null,
+    ): array {
         $request = $this->requestBuilder
             ->model(Model::SALE_ORDER_LINE)
             ->where('order_id.name', '=', $orderId);
+
+        if ($limit !== null) {
+            $request->limit($limit);
+        }
+
+        if ($offset !== null) {
+            $request->offset($offset);
+        }
+
+        if ($order !== null) {
+            $request->order($order);
+        }
 
         if ($fields !== null) {
             $request->fields($fields);

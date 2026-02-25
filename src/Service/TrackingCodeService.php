@@ -25,8 +25,14 @@ class TrackingCodeService
      * @throws InvalidArgumentException When both orderId and code are null or when mapping fails
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function searchTrackingCodes(?string $orderId = null, ?string $code = null, ?array $fields = null): array
-    {
+    public function searchTrackingCodes(
+        ?string $orderId = null,
+        ?string $code = null,
+        ?array $fields = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?string $order = null,
+    ): array {
         if ($orderId === null && $code === null) {
             throw new InvalidArgumentException('At least one search parameter (orderId or code) must be provided');
         }
@@ -39,6 +45,18 @@ class TrackingCodeService
 
         if ($code !== null) {
             $request->where('code', '=', $code);
+        }
+
+        if ($limit !== null) {
+            $request->limit($limit);
+        }
+
+        if ($offset !== null) {
+            $request->offset($offset);
+        }
+
+        if ($order !== null) {
+            $request->order($order);
         }
 
         if ($fields !== null) {

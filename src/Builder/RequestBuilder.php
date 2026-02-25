@@ -29,6 +29,8 @@ class RequestBuilder
     public function model(Model $model): self
     {
         $this->model = $model;
+        $this->recordId = null;
+        $this->updateFields = [];
         $this->queryBuilder->model($model->value);
         return $this;
     }
@@ -51,6 +53,24 @@ class RequestBuilder
         return $this;
     }
 
+    public function limit(int $limit): self
+    {
+        $this->queryBuilder->limit($limit);
+        return $this;
+    }
+
+    public function offset(int $offset): self
+    {
+        $this->queryBuilder->offset($offset);
+        return $this;
+    }
+
+    public function order(string $order): self
+    {
+        $this->queryBuilder->order($order);
+        return $this;
+    }
+
     public function getRaw(): array
     {
         $model = $this->queryBuilder->getModel();
@@ -62,7 +82,14 @@ class RequestBuilder
             'domain' => $domain,
             'fields' => $fields,
             'db' => $this->client->getConnection()->getDb(),
+            'limit' => $this->queryBuilder->getLimit(),
+            'offset' => $this->queryBuilder->getOffset(),
         ];
+
+        $order = $this->queryBuilder->getOrder();
+        if ($order !== null) {
+            $queryParams['order'] = $order;
+        }
 
         return $this->client->request('GET', $endpoint, ['query' => $queryParams]);
     }
