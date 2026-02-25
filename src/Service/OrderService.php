@@ -213,11 +213,11 @@ class OrderService
      * Update order's spark field
      *
      * @param int $id Odoo internal ID (not order ID)
-     * @param string $spark Spark value to set
+     * @param string|false $spark Spark value to set, or false to clear
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function updateOrderSpark(int $id, string $spark): bool
+    public function updateOrderSpark(int $id, string|false $spark): bool
     {
         return $this->updateOrderFields(
             id: $id,
@@ -229,11 +229,11 @@ class OrderService
      * Update order item's spark field
      *
      * @param int $id Odoo internal ID of the order line
-     * @param string $spark Spark value to set
+     * @param string|false $spark Spark value to set, or false to clear
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function updateOrderItemSpark(int $id, string $spark): bool
+    public function updateOrderItemSpark(int $id, string|false $spark): bool
     {
         return $this->requestBuilder
             ->model(Model::SALE_ORDER_LINE)

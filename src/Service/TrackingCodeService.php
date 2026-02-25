@@ -53,11 +53,11 @@ class TrackingCodeService
      * Update tracking code's spark field
      *
      * @param int $id Odoo internal ID
-     * @param string $spark Spark value to set
+     * @param string|false $spark Spark value to set, or false to clear
      * @return bool True if update was successful
      * @throws OdooRecordNotFoundException When no record is found
      */
-    public function updateSpark(int $id, string $spark): bool
+    public function updateSpark(int $id, string|false $spark): bool
     {
         return $this->requestBuilder
             ->model(Model::BS_TRACKING_CODE)
