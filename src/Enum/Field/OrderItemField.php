@@ -11,4 +11,5 @@ enum OrderItemField: string
     case PRICE_TOTAL = 'price_total';
     case PRICE_SUBTOTAL = 'price_subtotal';
     case QUANTITY = 'product_uom_qty';
+    case SPARK = 'spark';
 }

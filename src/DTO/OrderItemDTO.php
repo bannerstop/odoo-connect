@@ -15,7 +15,8 @@ class OrderItemDTO
         public readonly ?float $priceUnit,
         public readonly ?float $priceTotal,
         public readonly ?float $priceSubtotal,
-        public readonly ?float $quantity
+        public readonly ?float $quantity,
+        public readonly ?string $spark,
     ) {}
 
     public static function fromArray(array $data): self
@@ -31,6 +32,7 @@ class OrderItemDTO
             priceTotal: $data['price_total'] ?? null,
             priceSubtotal: $data['price_subtotal'] ?? null,
             quantity: $data['product_uom_qty'] ?? null,
+            spark: $data['spark'] ?: null,
         );
     }
 }

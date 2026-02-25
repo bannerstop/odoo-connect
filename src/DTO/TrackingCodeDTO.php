@@ -14,6 +14,7 @@ class TrackingCodeDTO
         public readonly ?string $carrier,
         public readonly DateTimeImmutable $createDate,
         public readonly DateTimeImmutable $writeDate,
+        public readonly ?string $spark,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -27,6 +28,7 @@ class TrackingCodeDTO
                 ->setTimezone($config->getReturnDataTimezone()),
             writeDate: (new DateTimeImmutable($data['write_date'], $config->getOdooTimezone()))
                 ->setTimezone($config->getReturnDataTimezone()),
+            spark: $data['spark'] ?: null,
         );
     }
 }

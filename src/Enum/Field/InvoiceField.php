@@ -9,4 +9,5 @@ enum InvoiceField: string
     case AMOUNT_UNTAXED = 'amount_untaxed';
     case AMOUNT_RESIDUAL = 'amount_residual';
     case CREATE_DATE = 'create_date';
+    case SPARK = 'spark';
 }

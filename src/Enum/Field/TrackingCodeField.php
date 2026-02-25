@@ -10,4 +10,5 @@ enum TrackingCodeField: string
     case CARRIER = 'carrier';
     case CREATE_DATE = 'create_date';
     case WRITE_DATE = 'write_date';
+    case SPARK = 'spark';
 }

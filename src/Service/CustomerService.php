@@ -37,4 +37,21 @@ class CustomerService
         
         return $request->get()[0];
     }
+
+    /**
+     * Update customer's spark field
+     *
+     * @param int $id Odoo internal ID
+     * @param string $spark Spark value to set
+     * @return bool True if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateSpark(int $id, string $spark): bool
+    {
+        return $this->requestBuilder
+            ->model(Model::RES_PARTNER)
+            ->recordId($id)
+            ->updateFields([CustomerField::SPARK->value => $spark])
+            ->update();
+    }
 }

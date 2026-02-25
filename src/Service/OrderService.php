@@ -208,4 +208,37 @@ class OrderService
                 'sale_order_id' => $id
             ]);
     }
+
+    /**
+     * Update order's spark field
+     *
+     * @param int $id Odoo internal ID (not order ID)
+     * @param string $spark Spark value to set
+     * @return bool True if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateOrderSpark(int $id, string $spark): bool
+    {
+        return $this->updateOrderFields(
+            id: $id,
+            fields: [OrderField::SPARK->value => $spark]
+        );
+    }
+
+    /**
+     * Update order item's spark field
+     *
+     * @param int $id Odoo internal ID of the order line
+     * @param string $spark Spark value to set
+     * @return bool True if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateOrderItemSpark(int $id, string $spark): bool
+    {
+        return $this->requestBuilder
+            ->model(Model::SALE_ORDER_LINE)
+            ->recordId($id)
+            ->updateFields([OrderItemField::SPARK->value => $spark])
+            ->update();
+    }
 }

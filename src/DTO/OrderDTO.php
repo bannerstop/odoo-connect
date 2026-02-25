@@ -34,6 +34,7 @@ class OrderDTO
         public readonly DateTimeImmutable $createDate,
         public readonly DateTimeImmutable $dateOrder,
         public readonly string $origin,
+        public readonly ?string $spark,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -74,6 +75,7 @@ class OrderDTO
             dateOrder: (new DateTimeImmutable($data['date_order'], $config->getOdooTimezone()))
                 ->setTimezone($config->getReturnDataTimezone()),
             origin: $data['origin'],
+            spark: $data['spark'] ?: null,
         );
     }
 }

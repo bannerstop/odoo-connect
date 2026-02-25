@@ -15,6 +15,7 @@ class CustomerDTO
         public readonly ?string $zip,
         public readonly ?string $city,
         public readonly ?string $countryName,
+        public readonly ?string $spark,
     ) {}
 
     public static function fromArray(array $data): self
@@ -30,6 +31,7 @@ class CustomerDTO
             zip: $data["zip"] ?? null,
             city: $data["city"] ?? null,
             countryName: $data["country_id"][0]["name"] ?? null,
+            spark: $data["spark"] ?: null,
         );
     }
 }

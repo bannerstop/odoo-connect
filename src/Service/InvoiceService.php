@@ -64,4 +64,21 @@ class InvoiceService
         
         return $request->get()[0];
     }
+
+    /**
+     * Update invoice's spark field
+     *
+     * @param int $id Odoo internal ID
+     * @param string $spark Spark value to set
+     * @return bool True if update was successful
+     * @throws OdooRecordNotFoundException When no record is found
+     */
+    public function updateSpark(int $id, string $spark): bool
+    {
+        return $this->requestBuilder
+            ->model(Model::ACCOUNT_MOVE)
+            ->recordId($id)
+            ->updateFields([InvoiceField::SPARK->value => $spark])
+            ->update();
+    }
 }

@@ -13,6 +13,7 @@ class InvoiceDTO
         public readonly ?float $amountUntaxed,
         public readonly ?float $amountResidual,
         public readonly DateTimeImmutable $createDate,
+        public readonly ?string $spark,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -23,7 +24,8 @@ class InvoiceDTO
             amountUntaxed: $data['amount_untaxed'] ?? null,
             amountResidual: $data['amount_residual'] ?? null,
             createDate: (new DateTimeImmutable($data['create_date'], $config->getOdooTimezone()))
-                ->setTimezone($config->getReturnDataTimezone())
+                ->setTimezone($config->getReturnDataTimezone()),
+            spark: $data['spark'] ?: null,
         );
     }
 }
