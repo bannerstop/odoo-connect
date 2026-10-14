@@ -76,6 +76,7 @@ $order = $orderService->getOrderByOrderId('S3136366');
 echo $order->orderId;        // "S3136366"
 echo $order->state->value;   // "sale"
 echo $order->amountTotal;    // 129.99
+echo $order->currency;       // "EUR" or null
 echo $order->spark;          // "some-value" or null
 ```
 
@@ -245,6 +246,7 @@ echo $customer->name;
 echo $customer->email;
 echo $customer->city;
 echo $customer->countryName;
+echo $customer->lang;        // "de_DE" or null
 
 $customerService->updateSpark($odooId, 'spark-value');
 $customerService->updateSpark($odooId, false); // clear
