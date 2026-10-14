@@ -37,7 +37,7 @@ class CustomerDTO
             countryName: $data["country_id"][0]["name"] ?? null,
             spark: $data["spark"] ?: null,
             lang: $data["lang"] ?? null,
-            countryCode: CountryCodeMapper::fromName($data["country_id"][0]["name"] ?? null),
+            countryCode: CountryCodeMapper::fromCountry($data["country_id"][0]["id"] ?? null, $data["country_id"][0]["name"] ?? null),
         );
     }
 }
