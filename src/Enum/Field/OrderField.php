@@ -25,5 +25,6 @@ enum OrderField: string
     case CREATE_DATE = 'create_date';
     case BS_TRACKING_CODE_IDS = 'bs_tracking_code_ids';
     case ORIGIN = 'origin';
+    case CURRENCY = 'currency_id';
     case SPARK = 'spark';
 }

@@ -35,6 +35,7 @@ class OrderDTO
         public readonly DateTimeImmutable $dateOrder,
         public readonly string $origin,
         public readonly ?string $spark,
+        public readonly ?string $currency = null,
     ) {}
 
     public static function fromArray(array $data, Config $config): self
@@ -76,6 +77,7 @@ class OrderDTO
                 ->setTimezone($config->getReturnDataTimezone()),
             origin: $data['origin'],
             spark: $data['spark'] ?: null,
+            currency: $data['currency_id'][0]['name'] ?? null,
         );
     }
 }
