@@ -2,6 +2,8 @@
 
 namespace Bannerstop\OdooConnect\DTO;
 
+use Bannerstop\OdooConnect\Mapper\CountryCodeMapper;
+
 class CustomerDTO
 {
     public function __construct(
@@ -17,6 +19,7 @@ class CustomerDTO
         public readonly ?string $countryName,
         public readonly ?string $spark,
         public readonly ?string $lang = null,
+        public readonly ?string $countryCode = null,
     ) {}
 
     public static function fromArray(array $data): self
@@ -34,6 +37,7 @@ class CustomerDTO
             countryName: $data["country_id"][0]["name"] ?? null,
             spark: $data["spark"] ?: null,
             lang: $data["lang"] ?? null,
+            countryCode: CountryCodeMapper::fromName($data["country_id"][0]["name"] ?? null),
         );
     }
 }

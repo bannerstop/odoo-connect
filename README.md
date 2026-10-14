@@ -246,6 +246,7 @@ echo $customer->name;
 echo $customer->email;
 echo $customer->city;
 echo $customer->countryName;
+echo $customer->countryCode; // "DE" or null, ISO 3166-1 alpha-2
 echo $customer->lang;        // "de_DE" or null
 
 $customerService->updateSpark($odooId, 'spark-value');
